@@ -3,14 +3,6 @@ description: File a bug report
 title: "[Bug]: "
 labels: ["bug"]
 body:
-  - type: input
-    id: docker-version
-    attributes:
-      label: Docker Version
-      description: What version of Docker are you running? `docker version`
-    validations:
-      required: true
-
   - type: textarea
     id: error
     attributes:
