@@ -14,6 +14,10 @@ inputs:
     description: 'Access Key'
     required: false
     default: 'latest'
+  clean_timeout:
+    description: 'Timeout when cleaning all the resources in order not to get stuck'
+    required: false
+    default: '5m'
 runs:
   using: 'node16'
   main: 'index.js'

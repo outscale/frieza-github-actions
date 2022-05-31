@@ -4,7 +4,8 @@ const setup = require('./lib/frieza');
 
 (async () => {
   try {
-    await setup.cleanAccount()
+    const timeout = core.getInput('clean_timeout');
+    await setup.cleanAccount(timeout)
 } catch (error) {
     core.setFailed(error.message);
 }
