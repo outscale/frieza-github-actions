@@ -97,9 +97,9 @@ async function makeSnapshot() {
     await exec.exec('frieza', ['snapshot', 'new', default_snapshot_name, default_profile_name]);
 }
 
-async function cleanAccount() {
+async function cleanAccount(timeout) {
     core.debug(`Clean account`);
-    await exec.exec('frieza', ['clean', '--auto-approve', default_snapshot_name]);
+    await exec.exec('frieza', ['clean', '--timeout', timeout, '--auto-approve', default_snapshot_name]);
 }
 
 

@@ -18,7 +18,10 @@ This action will clean the resources created between the call to the end of the 
 
 ## `frieza_version`
 
-**Required** The version of Frieza to use. Default is "`latest`".
+The version of Frieza to use. Default is "`latest`".
+## `clean_timeout`
+
+Timeout when cleaning all the resources in order not to get stuck. Default is "`5m`".
 
 ## Example usage
 ```
