@@ -92,6 +92,11 @@ async function addCredentials(access_key, secret_key, region) {
     await exec.exec('frieza', ['profile', 'new', 'outscale_oapi', `--region=${region}`, `--ak=${access_key}`, `--sk=${secret_key}`, default_profile_name]);
 }
 
+async function removeCredentials() {
+    core.debug(`Remove credentials of frieza`);
+    await exec.exec('frieza', ['profile', 'remove', default_profile_name]);
+}
+
 async function makeSnapshot() {
     core.debug(`Make a snapshot`);
     await exec.exec('frieza', ['snapshot', 'new', default_snapshot_name, default_profile_name]);
@@ -105,5 +110,6 @@ async function cleanAccount(timeout) {
 
 exports.makeSnapshot = makeSnapshot;
 exports.addCredentials = addCredentials;
+exports.removeCredentials = removeCredentials
 exports.downloadBinary = downloadBinary;
 exports.cleanAccount = cleanAccount;
