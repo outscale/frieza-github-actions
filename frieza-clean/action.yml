@@ -18,6 +18,10 @@ inputs:
     description: 'Timeout when cleaning all the resources in order not to get stuck'
     required: false
     default: '5m'
+  error_on_dirty:
+    description: Exit in error when the account is not clean.
+    required: false
+    default: 'false'
 runs:
   using: 'node16'
   main: 'index.js'

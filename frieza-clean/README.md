@@ -23,6 +23,11 @@ The version of Frieza to use. Default is "`latest`".
 
 Timeout when cleaning all the resources in order not to get stuck. Default is "`5m`".
 
+## `error_on_dirty`
+
+Exit in error when the account is not clean. Default is "`false`".
+
+
 ## Example usage
 ```
 uses: outscale-dev/frieza-github-actions/frieza-clean@master
