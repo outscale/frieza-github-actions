@@ -5,9 +5,20 @@ const setup = require('./lib/frieza');
 (async () => {
   try {
     const timeout = core.getInput('clean_timeout');
-    await setup.cleanAccount(timeout)
+    const errorOnDirty = core.getInput('error_on_dirty') == 'true';
+    
+    let needsClean = await setup.needsClean()
+
+    if (needsClean) {
+      await setup.cleanAccount(timeout)
+    }
+
     await setup.removeCredentials()
-} catch (error) {
+
+    if (needsClean && errorOnDirty) {
+      core.setFailed("The state is different. New resources were found.");
+    }
+  } catch (error) {
     core.setFailed(error.message);
-}
+  }
 })();

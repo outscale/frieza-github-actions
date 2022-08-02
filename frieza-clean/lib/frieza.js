@@ -102,6 +102,15 @@ async function makeSnapshot() {
     await exec.exec('frieza', ['snapshot', 'new', default_snapshot_name, default_profile_name]);
 }
 
+async function needsClean() {
+    core.debug(`Check if the account needs to be cleaned`)
+    execOutput = exec.getExecOutput('frieza', ['clean', '--plan', '--json', '--auto-approve', default_snapshot_name]);
+    return execOutput.then( stdout => {
+        dataJson = JSON.parse(stdout.stderr);
+        return (dataJson.targets.length == 1 && Object.keys(dataJson.targets[0].objects).length != 0)
+    })
+}
+
 async function cleanAccount(timeout) {
     core.debug(`Clean account`);
     await exec.exec('frieza', ['clean', '--timeout='+ timeout, '--auto-approve', default_snapshot_name]);
@@ -113,3 +122,4 @@ exports.addCredentials = addCredentials;
 exports.removeCredentials = removeCredentials
 exports.downloadBinary = downloadBinary;
 exports.cleanAccount = cleanAccount;
+exports.needsClean = needsClean
