@@ -21,6 +21,10 @@ Then, start the action:
 node index.js
 ```
 
+## Contributing
+
+Feel free to open an issue to ask question or suggest improvements.
+
 ## License
 > Copyright Outscale SAS
 >
