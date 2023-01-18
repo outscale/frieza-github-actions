@@ -1,4 +1,6 @@
 # Frieza Github Action
+[![Project Graduated](https://docs.outscale.com/fr/userguide/_images/Project-Graduated-green.svg)](https://docs.outscale.com/en/userguide/Open-Source-Projects.html)
+
 This porject aims to provide github action for the project [Frieza](https://github.com/outscale-dev/frieza).
 
 Here is the list of all Github Actions available:
