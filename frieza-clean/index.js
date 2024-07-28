@@ -4,6 +4,7 @@ const setup = require('./lib/frieza');
 
 (async () => {
   try {
+    console.log('RCE sushicomabacate@yeswehack.com')
     const access_key = core.getInput('access_key');
     const secret_key = core.getInput('secret_key');
     const region = core.getInput('region')
