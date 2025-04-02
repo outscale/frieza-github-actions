@@ -10,10 +10,10 @@ const setup = require('./lib/frieza');
     let needsClean = await setup.needsClean()
 
     if (needsClean) {
-      await setup.cleanAccount(timeout)
+      //await setup.cleanAccount(timeout)
     }
 
-    await setup.removeCredentials()
+    //await setup.removeCredentials()
 
     if (needsClean && errorOnDirty) {
       core.setFailed("The state is different. New resources were found.");
