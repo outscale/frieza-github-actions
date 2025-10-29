@@ -24,11 +24,11 @@ async function getRelease(release) {
 
 function getAssetURL(data, asset_name) {
     for (const element of data) {
-        if (element["name"] == asset_name) {
+        if (element["name"].startsWith(asset_name)) {
             return element["browser_download_url"]
         }
     }
-    return ""
+    throw new Error(`Could not determine asset url`);
 }
 
 async function copyBinary(pathToCLI, release_tag) {
@@ -53,14 +53,23 @@ async function downloadBinary(release) {
         release_tag = release_tag.substring(1)
     }
 
-    const asset_name = "frieza_" + release_tag + "_" + mapOS(os.platform()) + "_" + mapArch(os.arch()) + ".zip"
+    const asset_name = "frieza_" + release_tag + "_" + mapOS(os.platform()) + "_" + mapArch(os.arch())
     const url = getAssetURL(release_data["assets"], asset_name)
 
     core.debug(`Downloading Frieza from ${url}`);
     const downloadedPath = await tc.downloadTool(url)
 
-    core.debug('Extracting Frieza zip file');
-    const pathToCLI = await tc.extractZip(downloadedPath);
+    let pathToCLI = "";
+    if (downloadedPath.endsWith(".zip")) {
+        core.debug('Extracting Frieza zip file');
+        pathToCLI = await tc.extractZip(downloadedPath);
+    } else if (downloadedPath.endsWith(".tar.gz")) {
+        core.debug('Extracting Frieza tar file');
+        pathToCLI = await tc.extractTar(downloadedPath);
+    } else {
+        throw new Error(`Unknown archive format`);
+    }
+
     core.debug(`Frieza path is ${pathToCLI}.`);
 
     if (!downloadedPath || !pathToCLI) {
