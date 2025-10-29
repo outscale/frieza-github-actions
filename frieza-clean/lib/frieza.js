@@ -60,10 +60,10 @@ async function downloadBinary(release) {
     const downloadedPath = await tc.downloadTool(url)
 
     let pathToCLI = "";
-    if (downloadedPath.endsWith(".zip")) {
+    if (url.endsWith(".zip")) {
         core.debug('Extracting Frieza zip file');
         pathToCLI = await tc.extractZip(downloadedPath);
-    } else if (downloadedPath.endsWith(".tar.gz")) {
+    } else if (url.endsWith(".tar.gz")) {
         core.debug('Extracting Frieza tar file');
         pathToCLI = await tc.extractTar(downloadedPath);
     } else {
