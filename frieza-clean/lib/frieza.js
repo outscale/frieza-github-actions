@@ -13,9 +13,9 @@ const default_snapshot_name = 'snapshot-action'
 async function getRelease(release) {
     let url = ''
     if (release == '') {
-        url = "https://api.github.com/repos/outscale-dev/frieza/releases/latest"
+        url = "https://api.github.com/repos/outscale/frieza/releases/latest"
     } else {
-        url = `https://api.github.com/repos/outscale-dev/frieza/releases/${release}`
+        url = `https://api.github.com/repos/outscale/frieza/releases/${release}`
     }
     let response = await fetch(url);
     let data = await response.json();
