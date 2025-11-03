@@ -2,17 +2,28 @@
   "name": "setup-frieza",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup --config rollup.config.js"
   },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@actions/core": "^1.7.0",
-    "@actions/io": "^1.1.2",
-    "@actions/tool-cache": "^1.7.2",
-    "node-fetch": "^2.6.7"
+    "@actions/core": "^1.11.1",
+    "@actions/io": "^2.0.0",
+    "@actions/tool-cache": "^2.0.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "rollup": "^4.52.5"
   }
 }

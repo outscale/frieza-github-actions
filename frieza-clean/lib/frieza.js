@@ -3,7 +3,6 @@ const tc = require('@actions/tool-cache');
 const io = require('@actions/io');
 const exec = require('@actions/exec');
 
-const fetch = require('node-fetch')
 const os = require('os');
 const path = require('path');
 
