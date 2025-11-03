@@ -10,11 +10,11 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@actions/core": "^1.7.0",
-		"@actions/io": "^1.1.2",
-		"@actions/tool-cache": "^1.7.2",
+		"@actions/core": "^1.11.0",
+		"@actions/io": "^2.0",
+		"@actions/tool-cache": "^2.0",
 		"lodash": "^4.17.21",
-		"node-fetch": "^2.6.7"
+		"node-fetch": "^3.3.2"
 	},
 	"devDependencies": {
 		"webpack": "^5.102.1",
