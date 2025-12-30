@@ -114,15 +114,15 @@ async function makeSnapshot() {
 async function needsClean() {
     core.debug(`Check if the account needs to be cleaned`)
     execOutput = exec.getExecOutput('frieza', ['clean', '--plan', '--json', '--auto-approve', default_snapshot_name]);
-    return execOutput.then( stdout => {
+    return execOutput.then(stdout => {
         dataJson = JSON.parse(stdout.stderr);
         return (dataJson.targets.length == 1 && Object.keys(dataJson.targets[0].objects).length != 0)
     })
 }
 
-async function cleanAccount(timeout) {
+async function cleanAccount(timeout, ignoreCleanupFailure) {
     core.debug(`Clean account`);
-    await exec.exec('frieza', ['clean', '--timeout='+ timeout, '--auto-approve', default_snapshot_name]);
+    await exec.exec('frieza', ['clean', '--timeout=' + timeout, '--auto-approve', default_snapshot_name], { ignoreReturnCode: ignoreCleanupFailure });
 }
 
 
