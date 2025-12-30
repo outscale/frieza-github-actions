@@ -22,6 +22,10 @@ inputs:
     description: Exit in error when the account is not clean.
     required: false
     default: 'false'
+  ignore_cleanup_failure:
+    description: Ignore cleanup failures, continue to next step if possible.
+    required: false
+    default: 'false'
 runs:
   using: 'node20'
   main: 'index.js'
