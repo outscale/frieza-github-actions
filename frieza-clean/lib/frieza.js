@@ -96,9 +96,27 @@ function mapOS(os) {
     return mappings[os] || os;
 }
 
-async function addCredentials(access_key, secret_key, region) {
+async function addCredentials(access_key, secret_key, region, providers) {
     core.debug(`Add credentials to frieza`);
-    await exec.exec('frieza', ['profile', 'new', 'outscale_oapi', `--region=${region}`, `--ak=${access_key}`, `--sk=${secret_key}`, default_profile_name]);
+
+    await exec.exec('frieza', [
+        'profile',
+        'new',
+        providers[0],
+        `--region=${region}`,
+        `--ak=${access_key}`,
+        `--sk=${secret_key}`,
+        default_profile_name,
+    ]);
+
+    for (let i = 1; i < providers.length; i++) {
+        await exec.exec('frieza', [
+            'profile',
+            'add-provider',
+            providers[i],
+            default_profile_name,
+        ]);
+    }
 }
 
 async function removeCredentials() {

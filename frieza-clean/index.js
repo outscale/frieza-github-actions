@@ -9,13 +9,16 @@ const setup = require('./lib/frieza');
     const region = core.getInput('region')
     const release = core.getInput('release');
 
+    const providersInput = core.getInput('providers');
+    const providers = providersInput.split(',').map(p => p.trim()).filter(p => p !== '');
+    
     // Binary
     const pathToCLI = await setup.downloadBinary(release)
     core.debug(`Add ${pathToCLI} to PATH`)
     core.addPath(pathToCLI);
 
     // Credentials
-    await setup.addCredentials(access_key, secret_key, region)
+    await setup.addCredentials(access_key, secret_key, region, providers)
 
     // Snapshot
     await setup.makeSnapshot()
