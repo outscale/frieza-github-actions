@@ -26,6 +26,10 @@ inputs:
     description: Ignore cleanup failures, continue to next step if possible.
     required: false
     default: 'false'
+  providers:
+    description: 'List of providers (comma-separated: outscale_oapi,outscale_oos,outscale_oks,...).'
+    required: false
+    default: 'outscale_oapi'
 runs:
   using: 'node20'
   main: 'index.js'
