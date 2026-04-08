@@ -134,7 +134,7 @@ async function needsClean() {
     execOutput = exec.getExecOutput('frieza', ['clean', '--plan', '--json', '--auto-approve', default_snapshot_name]);
     return execOutput.then(stdout => {
         dataJson = JSON.parse(stdout.stderr);
-        return (dataJson.targets.length == 1 && Object.keys(dataJson.targets[0].objects).length != 0)
+        return dataJson.targets.some(target => Object.keys(target.objects).length != 0)
     })
 }
 
