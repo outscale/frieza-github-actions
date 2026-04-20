@@ -18,7 +18,7 @@ jobs:
           access_key: ${{ secrets.OSC_ACCESS_KEY }}
           secret_key: ${{ secrets.OSC_SECRET_KEY }}
           region: ${{ secrets.OSC_REGION }}
-    - uses: actions/setup-python@v3
+    - uses: actions/setup-python@3542bca2639a428e1796aaa6a2ffef0c0f575566 # v3
     - name: Install osc-cli and jq
       run: |
         python3 -m pip install osc-sdk
