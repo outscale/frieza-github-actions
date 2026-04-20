@@ -1,12 +1,12 @@
 name: Test
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [ master ]
 
 jobs:
   frieza-clean:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     # Retrieve the code from the repo (UNSAFE)
     - uses: actions/checkout@v2
@@ -24,7 +24,7 @@ jobs:
         python3 -m pip install osc-sdk
         sudo apt install jq
     - name: Create default profile
-      run: | 
+      run: |
         mkdir -p $HOME/.osc
         jq --null-input --arg ak $OSC_ACCESS_KEY --arg sk $OSC_SECRET_KEY --arg region $OSC_REGION '{ "default": {"access_key": $ak, "secret_key": $sk, "region_name": $region, "host": "outscale.com", "https": true, "method": "POST" }}' > $HOME/.osc/config.json
       env:
@@ -34,4 +34,3 @@ jobs:
     - name: Create resources
       run: |
         osc-cli api CreateKeypair --KeypairName $GITHUB_SHA
-     
