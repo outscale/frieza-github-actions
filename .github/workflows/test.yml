@@ -4,33 +4,32 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions:
+  contents: read
+
 jobs:
   frieza-clean:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, eu-west-2]
     steps:
-    # Retrieve the code from the repo (UNSAFE)
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
-    - uses: ./frieza-clean
+    - name: ⬇️ Checkout repository
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+    - name: 🧹 Frieza
+      uses: ./frieza-clean
       with:
           access_key: ${{ secrets.OSC_ACCESS_KEY }}
           secret_key: ${{ secrets.OSC_SECRET_KEY }}
           region: ${{ secrets.OSC_REGION }}
-    - uses: actions/setup-python@v3
-    - name: Install osc-cli and jq
+    - name: ⬇️ Install octl
       run: |
-        python3 -m pip install osc-sdk
-        sudo apt install jq
-    - name: Create default profile
+        curl -L -o octl https://github.com/outscale/octl/releases/download/${{vars.OCTL_VERSION}}/octl_Linux_x86_64
+        install octl /usr/local/bin
+    - name: 🔐 Create default profile
       run: |
-        mkdir -p $HOME/.osc
-        jq --null-input --arg ak $OSC_ACCESS_KEY --arg sk $OSC_SECRET_KEY --arg region $OSC_REGION '{ "default": {"access_key": $ak, "secret_key": $sk, "region_name": $region, "host": "outscale.com", "https": true, "method": "POST" }}' > $HOME/.osc/config.json
+        octl profile add default --ak $OSC_ACCESS_KEY --sk $OSC_SECRET_KEY --region $OSC_REGION
       env:
         OSC_ACCESS_KEY: ${{secrets.OSC_ACCESS_KEY}}
         OSC_SECRET_KEY: ${{secrets.OSC_SECRET_KEY}}
         OSC_REGION: ${{secrets.OSC_REGION}}
-    - name: Create resources
+    - name: 🏗️ Create test resource
       run: |
-        osc-cli api CreateKeypair --KeypairName $GITHUB_SHA
+        octl iaas keypair create --name $GITHUB_SHA --jq .KeypairId
