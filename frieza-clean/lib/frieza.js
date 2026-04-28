@@ -131,12 +131,12 @@ async function makeSnapshot(options) {
     if (Object.hasOwn(options, "only_resource_types")
         && typeof options["only_resource_types"] === "string"
         && options["only_resource_types"].length > 0) {
-        args.push("--only_resource_types=" + options["only_resource_types"])
+        args.push("--only-resource-types=" + options["only_resource_types"])
     }
     if (Object.hasOwn(options, "exclude_resource_types")
         && typeof options["exclude_resource_types"] === "string"
         && options["exclude_resource_types"].length > 0) {
-        args.push("--exclude_resource_types=" + options["exclude_resource_types"])
+        args.push("--exclude-resource-types=" + options["exclude_resource_types"])
     }
 
     await exec.exec('frieza', args);
