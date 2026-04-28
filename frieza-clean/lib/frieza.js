@@ -124,9 +124,22 @@ async function removeCredentials() {
     await exec.exec('frieza', ['profile', 'remove', default_profile_name]);
 }
 
-async function makeSnapshot() {
+async function makeSnapshot(options) {
     core.debug(`Make a snapshot`);
-    await exec.exec('frieza', ['snapshot', 'new', default_snapshot_name, default_profile_name]);
+    
+    let args = ['snapshot', 'new', default_snapshot_name, default_profile_name];
+    if (Object.hasOwn(options, "only_resource_types") 
+        && typeof options["only_resource_types"] === "string"
+        && options["only_resource_types"].length > 0) {
+        args.push("--only_resource_types="+options["only_resource_types"])
+    }
+    if (Object.hasOwn(options, "exclude_resource_types") 
+        && typeof options["exclude_resource_types"] === "string"
+        && options["exclude_resource_types"].length > 0) {
+        args.push("--exclude_resource_types="+options["exclude_resource_types"])
+    }
+
+    await exec.exec('frieza', args);
 }
 
 async function needsClean() {
