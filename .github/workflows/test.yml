@@ -19,6 +19,8 @@ jobs:
           access_key: ${{ secrets.OSC_ACCESS_KEY }}
           secret_key: ${{ secrets.OSC_SECRET_KEY }}
           region: ${{ secrets.OSC_REGION }}
+          post_script: |
+            echo "Good bye World !"
     - name: ⬇️ Install octl
       run: |
         curl -L -o octl https://github.com/outscale/octl/releases/download/${{vars.OCTL_VERSION}}/octl_Linux_x86_64
