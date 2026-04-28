@@ -30,6 +30,12 @@ inputs:
     description: 'List of providers (comma-separated: outscale_oapi,outscale_oos,outscale_oks,...).'
     required: false
     default: 'outscale_oapi'
+  only_resource_types:
+    description: Remove only theses resource types (separated by ','). You can see all resource types in the description of the provider.
+    required: false
+  exclude_resource_types:
+    description: Remove all except theses resource types (separated by ','). You can see all resource types in the description of the provider.
+    required: false
 runs:
   using: 'node20'
   main: 'index.js'
