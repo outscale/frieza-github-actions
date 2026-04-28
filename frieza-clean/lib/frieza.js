@@ -144,9 +144,9 @@ async function makeSnapshot(options) {
 
 async function needsClean() {
     core.debug(`Check if the account needs to be cleaned`)
-    execOutput = exec.getExecOutput('frieza', ['clean', '--plan', '--json', '--auto-approve', default_snapshot_name]);
+    let execOutput = exec.getExecOutput('frieza', ['clean', '--plan', '--json', '--auto-approve', default_snapshot_name]);
     return execOutput.then(stdout => {
-        dataJson = JSON.parse(stdout.stderr);
+        let dataJson = JSON.parse(stdout.stderr);
         return dataJson.targets.some(target => Object.keys(target.objects).length != 0)
     })
 }
