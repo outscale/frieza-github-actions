@@ -126,17 +126,17 @@ async function removeCredentials() {
 
 async function makeSnapshot(options) {
     core.debug(`Make a snapshot`);
-    
+
     let args = ['snapshot', 'new', default_snapshot_name, default_profile_name];
-    if (Object.hasOwn(options, "only_resource_types") 
+    if (Object.hasOwn(options, "only_resource_types")
         && typeof options["only_resource_types"] === "string"
         && options["only_resource_types"].length > 0) {
-        args.push("--only_resource_types="+options["only_resource_types"])
+        args.push("--only_resource_types=" + options["only_resource_types"])
     }
-    if (Object.hasOwn(options, "exclude_resource_types") 
+    if (Object.hasOwn(options, "exclude_resource_types")
         && typeof options["exclude_resource_types"] === "string"
         && options["exclude_resource_types"].length > 0) {
-        args.push("--exclude_resource_types="+options["exclude_resource_types"])
+        args.push("--exclude_resource_types=" + options["exclude_resource_types"])
     }
 
     await exec.exec('frieza', args);
@@ -156,10 +156,58 @@ async function cleanAccount(timeout, ignoreCleanupFailure) {
     await exec.exec('frieza', ['clean', '--timeout=' + timeout, '--auto-approve', default_snapshot_name], { ignoreReturnCode: ignoreCleanupFailure });
 }
 
+function joinMultilineCommands(commands) {
+    const result = []
+    const re = /\\\s*$/
+    const buf = []
+
+    for (const cmd of commands) {
+        buf.push(cmd.replace(re, '')) // push command into buffer
+
+        if (!re.test(cmd)) { // if command not ends with \
+            result.push(buf.join(' ')) // join buffer and push into result
+
+            buf.length = 0 // clear buffer
+        }
+    }
+
+    return result
+}
+
+async function runCommands(commands, shell) {
+    const options = {
+        silent: true,
+        listeners: {
+            stdline: (data) => info(data),
+            errline: (data) => info(data),
+        },
+    }
+
+    return (async () => {
+        for (const command of commands) {
+            if (command && command.trim() !== '') {
+                core.info(command);
+
+                const exitCode = shell === ''
+                    ? await exec.exec(command, [], options)
+                    : await exec.exec(shell, ['-c', command], options);
+
+                if (exitCode !== 0) {
+                    core.setFailed(`Command failed with exit code ${exitCode}`);
+                }
+            }
+        }
+    })().catch(error => core.setFailed(error.message))
+}
+
+async function post(post, shell) {
+    return runCommands(joinMultilineCommands(post), shell)
+}
 
 exports.makeSnapshot = makeSnapshot;
 exports.addCredentials = addCredentials;
-exports.removeCredentials = removeCredentials
+exports.removeCredentials = removeCredentials;
 exports.downloadBinary = downloadBinary;
 exports.cleanAccount = cleanAccount;
-exports.needsClean = needsClean
+exports.needsClean = needsClean;
+exports.post = post;

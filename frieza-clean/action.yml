@@ -36,6 +36,13 @@ inputs:
   exclude_resource_types:
     description: Remove all except theses resource types (separated by ','). You can see all resource types in the description of the provider.
     required: false
+  post_script:
+    description: 'Optional script to run after cleaning (e.g. to check the status).'
+    required: false
+  post_shell:
+    description: 'Shell to use for the post script (default: bash).'
+    required: false
+    default: 'bash'
 runs:
   using: 'node20'
   main: 'index.js'

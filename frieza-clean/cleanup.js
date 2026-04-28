@@ -3,23 +3,40 @@ const core = require('@actions/core');
 const setup = require('./lib/frieza');
 
 (async () => {
-  try {
-    const timeout = core.getInput('clean_timeout');
-    const errorOnDirty = core.getInput('error_on_dirty') == 'true';
-    const ignoreCleanupFailure = core.getInput('ignore_cleanup_failure') == 'true';
-    
-    let needsClean = await setup.needsClean()
+    let error = null;
 
-    if (needsClean) {
-      await setup.cleanAccount(timeout, ignoreCleanupFailure)
+    try {
+        const timeout = core.getInput('clean_timeout');
+        const errorOnDirty = core.getInput('error_on_dirty') == 'true';
+        const ignoreCleanupFailure = core.getInput('ignore_cleanup_failure') == 'true';
+
+        let needsClean = await setup.needsClean()
+
+        if (needsClean) {
+            await setup.cleanAccount(timeout, ignoreCleanupFailure)
+        }
+
+        await setup.removeCredentials()
+
+        if (needsClean && errorOnDirty) {
+            core.setFailed("The state is different. New resources were found.");
+        }
+    } catch (e) {
+        error = e;
     }
 
-    await setup.removeCredentials()
+    try {
+        const post = core.getMultilineInput('post_script');
+        const shell = core.getInput('post_shell');
 
-    if (needsClean && errorOnDirty) {
-      core.setFailed("The state is different. New resources were found.");
+        await setup.post(post, shell);
+    } catch (e) {
+        if (!error) {
+            error = e;
+        }
     }
-  } catch (error) {
-    core.setFailed(error.message);
-  }
+
+    if (error) {
+        core.setFailed(error);
+    }
 })();
