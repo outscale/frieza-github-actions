@@ -7,7 +7,7 @@ const setup = require('./lib/frieza');
         const access_key = core.getInput('access_key');
         const secret_key = core.getInput('secret_key');
         const region = core.getInput('region')
-        const release = core.getInput('release');
+        const release = core.getInput('frieza_version');
 
         const providersInput = core.getInput('providers');
         const providers = providersInput.split(',').map(p => p.trim()).filter(p => p !== '');

@@ -12,14 +12,22 @@ const default_snapshot_name = 'snapshot-action'
 
 async function getRelease(release) {
     let url = ''
-    if (release == '') {
+    if (release == '' || release == 'latest') {
         url = "https://api.github.com/repos/outscale/frieza/releases/latest"
     } else {
         url = `https://api.github.com/repos/outscale/frieza/releases/${release}`
     }
-    let response = await fetch(url);
-    let data = await response.json();
-    return data;
+
+    const response = await fetch(url);
+    const body = await response.text();
+
+    core.debug(`Fetch release response: ${response.status} ${response.statusText}`);
+    core.debug(`Fetch release: ${body}`);
+    if (!response.ok) {
+        throw new Error(`could not fetch release: ${response.status} ${response.statusText}`);
+    }
+
+    return JSON.parse(body);
 }
 
 function getAssetURL(data, asset_name) {
