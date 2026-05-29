@@ -11,9 +11,13 @@ inputs:
     description: 'Region'
     required: true
   frieza_version:
-    description: 'Access Key'
+    description: 'Frieza version to use. Default is latest.'
     required: false
     default: 'latest'
+  github_token:
+    description: 'GitHub token used to query release binaries.'
+    required: false
+    default: ${{ github.token }}
   clean_timeout:
     description: 'Timeout when cleaning all the resources in order not to get stuck'
     required: false

@@ -8,6 +8,7 @@ const setup = require('./lib/frieza');
         const secret_key = core.getInput('secret_key');
         const region = core.getInput('region')
         const release = core.getInput('frieza_version');
+        const githubToken = core.getInput('github_token');
 
         const providersInput = core.getInput('providers');
         const providers = providersInput.split(',').map(p => p.trim()).filter(p => p !== '');
@@ -16,7 +17,7 @@ const setup = require('./lib/frieza');
         const exclude_resource_types = core.getInput('exclude_resource_types');
 
         // Binary
-        const pathToCLI = await setup.downloadBinary(release)
+        const pathToCLI = await setup.downloadBinary(release, githubToken)
         core.debug(`Add ${pathToCLI} to PATH`)
         core.addPath(pathToCLI);
 
