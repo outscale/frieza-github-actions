@@ -3,31 +3,31 @@ const tc = require('@actions/tool-cache');
 const io = require('@actions/io');
 const exec = require('@actions/exec');
 
-const fetch = require('node-fetch')
 const os = require('os');
 const path = require('path');
 
 const default_profile_name = 'action'
 const default_snapshot_name = 'snapshot-action'
 
-async function getRelease(release) {
-    let url = ''
+async function getRelease(release, githubToken) {
+    const { getOctokit } = await import('@actions/github');
+    const octokit = getOctokit(githubToken);
+    let response;
+    let params = {
+        owner: 'outscale',
+        repo: 'frieza',
+    }
+
     if (release == '' || release == 'latest') {
-        url = "https://api.github.com/repos/outscale/frieza/releases/latest"
+        response = await octokit.rest.repos.getLatestRelease(params);
     } else {
-        url = `https://api.github.com/repos/outscale/frieza/releases/${release}`
+        params.release_id = release;
+        response = await octokit.rest.repos.getRelease(params);
     }
 
-    const response = await fetch(url);
-    const body = await response.text();
+    core.debug(`Fetch release response: ${response.data} ${response.status}`);
 
-    core.debug(`Fetch release response: ${response.status} ${response.statusText}`);
-    core.debug(`Fetch release: ${body}`);
-    if (!response.ok) {
-        throw new Error(`could not fetch release: ${response.status} ${response.statusText}`);
-    }
-
-    return JSON.parse(body);
+    return response.data;
 }
 
 function getAssetURL(data, asset_name) {
@@ -53,8 +53,8 @@ async function copyBinary(pathToCLI, release_tag) {
     }
 }
 
-async function downloadBinary(release) {
-    let release_data = await getRelease(release)
+async function downloadBinary(release, githubToken) {
+    let release_data = await getRelease(release, githubToken)
 
     let release_tag = release_data["tag_name"]
     if (!release_tag) {
@@ -64,32 +64,42 @@ async function downloadBinary(release) {
         release_tag = release_tag.substring(1)
     }
 
-    const asset_name = "frieza_" + release_tag + "_" + mapOS(os.platform()) + "_" + mapArch(os.arch())
+    const arch = mapArch(os.arch())
+    let cachedPath = tc.find('frieza', release_tag, arch)
+    if (cachedPath) {
+        core.debug(`Using cached Frieza from ${cachedPath}`)
+        return cachedPath;
+    }
+
+    const asset_name = "frieza_" + release_tag + "_" + mapOS(os.platform()) + "_" + arch
     const url = getAssetURL(release_data["assets"], asset_name)
 
     core.debug(`Downloading Frieza from ${url}`);
     const downloadedPath = await tc.downloadTool(url)
 
-    let pathToCLI = "";
+    let friezaFolder = "";
     if (url.endsWith(".zip")) {
         core.debug('Extracting Frieza zip file');
-        pathToCLI = await tc.extractZip(downloadedPath);
+        friezaFolder = await tc.extractZip(downloadedPath);
     } else if (url.endsWith(".tar.gz")) {
         core.debug('Extracting Frieza tar file');
-        pathToCLI = await tc.extractTar(downloadedPath);
+        friezaFolder = await tc.extractTar(downloadedPath);
     } else {
         throw new Error(`Unknown archive format`);
     }
 
-    core.debug(`Frieza path is ${pathToCLI}.`);
+    core.debug(`Frieza path is ${friezaFolder}.`);
 
-    if (!downloadedPath || !pathToCLI) {
+    if (!downloadedPath || !friezaFolder) {
         throw new Error(`Unable to download Frieza from ${url}`);
     }
 
-    await copyBinary(pathToCLI, `v${release_tag}`)
+    await copyBinary(friezaFolder, `v${release_tag}`)
 
-    return pathToCLI;
+    cachedPath = await tc.cacheDir(friezaFolder, 'frieza', release_tag, arch)
+    core.addPath(cachedPath)
+
+    return cachedPath;
 }
 
 function mapArch(arch) {
