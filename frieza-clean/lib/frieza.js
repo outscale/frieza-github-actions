@@ -24,7 +24,7 @@ async function getRelease(release) {
 
 function getAssetURL(data, asset_name) {
     for (const element of data) {
-        if (element["name"].startsWith(asset_name)) {
+        if ("name" in element && element["name"].startsWith(asset_name)) {
             return element["browser_download_url"]
         }
     }
@@ -49,6 +49,9 @@ async function downloadBinary(release) {
     let release_data = await getRelease(release)
 
     let release_tag = release_data["tag_name"]
+    if (!release_tag) {
+        throw new Error("no `tag_name` for release" + release)
+    }
     if (release_tag.startsWith("v")) {
         release_tag = release_tag.substring(1)
     }
