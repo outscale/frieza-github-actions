@@ -1,5 +1,5 @@
 name: 'frieza-clean'
-description: 'Clean an  3DS Outscale account after the action'
+description: 'Cleans up a 3DS Outscale account after the action'
 inputs:
   access_key:
     description: 'Access Key'
@@ -11,11 +11,11 @@ inputs:
     description: 'Region'
     required: true
   frieza_version:
-    description: 'Frieza version to use. Default is latest.'
+    description: 'Frieza version to use'
     required: false
-    default: 'latest'
+    default: 'v0.15.0'
   github_token:
-    description: 'GitHub token used to query release binaries.'
+    description: 'GitHub token used to query release binaries'
     required: false
     default: ${{ github.token }}
   clean_timeout:
