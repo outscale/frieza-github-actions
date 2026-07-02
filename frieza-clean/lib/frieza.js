@@ -21,8 +21,8 @@ async function getRelease(release, githubToken) {
     if (release == '' || release == 'latest') {
         response = await octokit.rest.repos.getLatestRelease(params);
     } else {
-        params.release_id = release;
-        response = await octokit.rest.repos.getRelease(params);
+        params.tag = release;
+        response = await octokit.rest.repos.getReleaseByTag(params);
     }
 
     core.debug(`Fetch release response: ${response.data} ${response.status}`);
