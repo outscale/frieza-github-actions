@@ -9,11 +9,12 @@ const setup = require('./lib/frieza');
         const timeout = core.getInput('clean_timeout');
         const errorOnDirty = core.getInput('error_on_dirty') == 'true';
         const ignoreCleanupFailure = core.getInput('ignore_cleanup_failure') == 'true';
+        const bypassDeletionProtection = core.getInput('bypass_deletion_protection') == 'true';
 
         let needsClean = await setup.needsClean()
 
         if (needsClean) {
-            await setup.cleanAccount(timeout, ignoreCleanupFailure)
+            await setup.cleanAccount(timeout, ignoreCleanupFailure, bypassDeletionProtection)
         }
 
         await setup.removeCredentials()

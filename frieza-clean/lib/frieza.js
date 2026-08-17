@@ -172,9 +172,9 @@ async function needsClean() {
     })
 }
 
-async function cleanAccount(timeout, ignoreCleanupFailure) {
+async function cleanAccount(timeout, ignoreCleanupFailure, bypassDeletionProtection) {
     core.debug(`Clean account`);
-    await exec.exec('frieza', ['clean', '--timeout=' + timeout, '--auto-approve', default_snapshot_name], { ignoreReturnCode: ignoreCleanupFailure });
+    await exec.exec('frieza', ['clean', '--timeout=' + timeout, '--auto-approve', default_snapshot_name, '--bypass-deletion-protection=' + bypassDeletionProtection], { ignoreReturnCode: ignoreCleanupFailure });
 }
 
 function joinMultilineCommands(commands) {
