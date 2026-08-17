@@ -47,6 +47,10 @@ inputs:
     description: 'Shell to use for the post script (default: bash).'
     required: false
     default: 'bash'
+  bypass_deletion_protection:
+    description: 'Disable API deletion protection before deleting supported resources.'
+    required: false
+    default: 'false'
 runs:
   using: 'node20'
   main: 'index.js'
