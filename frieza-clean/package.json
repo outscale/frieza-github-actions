@@ -1,18 +1,33 @@
 {
-  "name": "setup-frieza",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
+  "name": "frieza-clean",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cleans up a 3DS Outscale account after the action",
   "license": "ISC",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test",
+    "package": "rollup --config rollup.config.mjs",
+    "all": "npm run typecheck && npm run test && npm run package"
+  },
   "dependencies": {
-    "@actions/core": "^1.7.0",
+    "@actions/core": "^3.0.1",
+    "@actions/exec": "^3.0.0",
     "@actions/github": "^9.1.1",
-    "@actions/io": "^1.1.2",
-    "@actions/tool-cache": "^1.7.2"
+    "@actions/io": "^3.0.2",
+    "@actions/tool-cache": "^4.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.1",
+    "@types/node": "^26.6.6",
+    "rollup": "^4.67.5",
+    "tslib": "^2.9.1",
+    "typescript": "^5.9.3"
   }
 }

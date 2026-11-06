@@ -13,14 +13,9 @@ All Github Actions are developped using JavaScript. The runtime engine is Node.j
  - [Npm](https://nodejs.org/en/download/) (>=7.5.2)
 
 ### Run
-First, install all dependencies:
+Install dependencies, typecheck, run tests and build the bundles:
 ```shell
-npm install
-```
-
-Then, start the action:
-```shell
-node index.js
+cd frieza-clean && npm ci && npm run all
 ```
 
 ## Contributing
