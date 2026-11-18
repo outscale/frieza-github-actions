@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ javascript-typescript, actions ]
+        language: [ typescript ]
 
     steps:
       - name: Checkout
@@ -35,6 +35,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           queries: +security-and-quality
+          source-root: frieza-clean/src
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
